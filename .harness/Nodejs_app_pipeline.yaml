@@ -59,7 +59,7 @@ pipeline:
                   name: Build and push image to Docker Hub
                   identifier: Build_and_push_image_to_Docker_Hub
                   spec:
-                    connectorRef: account.harnessImage
+                    connectorRef: Nodejs_DockerHub_connector
                     repo: rafaelencinas/nodejs-pipeline-harness
                     tags:
                       - latest
