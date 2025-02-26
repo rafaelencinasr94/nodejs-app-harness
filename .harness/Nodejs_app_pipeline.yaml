@@ -1,0 +1,37 @@
+pipeline:
+  name: Nodejs app pipeline
+  identifier: Nodejs_app_pipeline
+  projectIdentifier: CI_NodeJs_Pipeline
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: nodejs_pipeline_harness
+        build: <+input>
+  stages:
+    - stage:
+        name: Build Test and Run
+        identifier: Build_Test_and_Run
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec:
+              size: small
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Install Node Modules
+                  identifier: Install_Node_Modules
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: node:14
+                    shell: Sh
+                    command: npm install
