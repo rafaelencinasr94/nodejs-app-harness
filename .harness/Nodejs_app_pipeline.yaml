@@ -35,3 +35,31 @@ pipeline:
                     image: node:14
                     shell: Sh
                     command: npm install
+              - step:
+                  type: Run
+                  name: Create image
+                  identifier: Create_image
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: node:14
+                    shell: Sh
+                    command: |-
+                      touch nodejsdockerfile
+                      cat > nodejsdockerfile <<- EOM
+                      FROM node:14
+                      WORKDIR /nodejshelloworld
+                      COPY package*.json app.js ./
+                      RUN npm install
+                      EXPOSE 8080
+                      CMD ["node", "app.js"]
+                      EOM
+                      cat nodejsdockerfile
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: Build and push image to Docker Hub
+                  identifier: Build_and_push_image_to_Docker_Hub
+                  spec:
+                    connectorRef: account.harnessImage
+                    repo: rafaelencinas/nodejs-pipeline-harness
+                    tags:
+                      - latest
