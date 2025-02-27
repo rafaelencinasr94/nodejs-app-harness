@@ -107,7 +107,9 @@ pipeline:
                       echo 'See logs'
                       docker logs hello-world
                       echo 'docker ps see running containers and port bindings'
-                      docker ps
+                      docker ps -a
+                      echo "==== Network Status ===="
+                      netstat -tuln # Check network status and listening ports
                       curl --request GET --url http://localhost:8080
                       echo "test successful"
                   description: Pull image and run it
