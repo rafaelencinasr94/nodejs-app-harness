@@ -86,9 +86,9 @@ pipeline:
           execution:
             steps:
               - step:
-                  type: Background
-                  name: Nodejs Server
-                  identifier: Nodejs_Server
+                  type: Run
+                  name: Pull image and run it
+                  identifier: Pull_image_and_run_it
                   spec:
                     connectorRef: Nodejs_DockerHub_connector
                     image: docker:latest
@@ -108,4 +108,4 @@ pipeline:
                       docker ps
                       curl --request GET --url http://localhost:8080
                       echo "test successful"
-                  description: Server connection
+                  description: Pull image and run it
