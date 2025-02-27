@@ -93,7 +93,8 @@ pipeline:
                     connectorRef: Nodejs_DockerHub_connector
                     image: rafaelencinas/nodejs-pipeline-harness
                     shell: Sh
-                    command: node app.js
+                    command: |
+                      ls
                   description: Server connection
               - step:
                   type: Run
@@ -104,6 +105,7 @@ pipeline:
                     image: curlimages/curl:7.73.0
                     shell: Sh
                     command: |-
+                      ls
                       sleep 10
                       curl --request GET \
                       --url http://localhost:8080
