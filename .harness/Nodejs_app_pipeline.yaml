@@ -63,3 +63,46 @@ pipeline:
                     repo: rafaelencinas/nodejs-pipeline-harness
                     tags:
                       - latest
+    - stage:
+        name: Integration Test
+        identifier: Integration_Test
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: false
+            paths: []
+          buildIntelligence:
+            enabled: false
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec:
+              size: small
+          execution:
+            steps:
+              - step:
+                  type: Background
+                  name: Nodejs Server
+                  identifier: Nodejs_Server
+                  spec:
+                    connectorRef: Nodejs_DockerHub_connector
+                    image: rafaelencinas/nodejs-pipeline-harness
+                    shell: Sh
+                  description: Server connection
+              - step:
+                  type: Run
+                  name: Test connection to server
+                  identifier: Test_connection_to_server
+                  spec:
+                    connectorRef: Nodejs_DockerHub_connector
+                    image: curlimages/curl:7.73.0
+                    shell: Sh
+                    command: |-
+                      sleep 10
+                      curl --request GET \
+                      --url http://localhost:8080
+                      echo "test sucessfull"
