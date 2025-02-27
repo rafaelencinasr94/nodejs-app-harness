@@ -70,7 +70,7 @@ pipeline:
         description: ""
         type: CI
         spec:
-          cloneCodebase: false
+          cloneCodebase: true
           caching:
             enabled: false
             paths: []
@@ -93,6 +93,7 @@ pipeline:
                     connectorRef: Nodejs_DockerHub_connector
                     image: rafaelencinas/nodejs-pipeline-harness
                     shell: Sh
+                    command: node app.js
                   description: Server connection
               - step:
                   type: Run
