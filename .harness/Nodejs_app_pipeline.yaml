@@ -93,8 +93,11 @@ pipeline:
                     connectorRef: Nodejs_DockerHub_connector
                     image: rafaelencinas/nodejs-pipeline-harness
                     shell: Sh
-                    command: |
+                    command: |+
                       ls
+                      echo 'Trying to run container'
+                      docker run -p 127.0.0.1:8080:8080 docerk.io/rafaelencinas/nodejs-pipeline-harness:latest   
+
                   description: Server connection
               - step:
                   type: Run
