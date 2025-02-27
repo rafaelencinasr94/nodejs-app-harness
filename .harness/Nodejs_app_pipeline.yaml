@@ -96,10 +96,15 @@ pipeline:
                     command: |-
                       ls
                       echo 'Trying to run app'
+                      echo 'Pulling docker image'
                       docker pull rafaelencinas/nodejs-pipeline-harness:latest
+                      echo 'Running docker image'
                       docker run -d -p 127.0.0.1:8080:8080 --name hello-world docker.io/rafaelencinas/nodejs-pipeline-harness:latest   
-                      sleep 15
+                      echo 'Wait 10 seconds'
+                      sleep 10
+                      echo 'See logs'
                       docker logs hello-world
+                      echo 'docker ps see running containers and port bindings'
                       docker ps
                       curl --request GET --url http://localhost:8080
                       echo "test successful"
