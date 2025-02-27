@@ -95,8 +95,9 @@ pipeline:
                     shell: Sh
                     command: |+
                       ls
-                      echo 'Trying to run container'
-                      docker run -p 127.0.0.1:8080:8080 docerk.io/rafaelencinas/nodejs-pipeline-harness:latest   
+                      echo 'Trying to run app'
+                      npm install
+                      node app.js
 
                   description: Server connection
               - step:
