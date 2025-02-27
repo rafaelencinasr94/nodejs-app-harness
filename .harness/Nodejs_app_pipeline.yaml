@@ -96,8 +96,8 @@ pipeline:
                     shell: Sh
                     command: |-
                       ls
-                      echo 'Trying to install curl'
-                      apk add --no-cache curl
+                      echo 'Trying to install curl and net-tools'
+                      apk add --no-cache curl net-tools
                       echo "Verifying docker is installed"
                       docker --version # Check if Docker is available
                       echo 'Create docker network'
