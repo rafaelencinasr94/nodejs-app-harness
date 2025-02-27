@@ -1,0 +1,112 @@
+pipeline:
+  name: Nodejs app pipeline
+  identifier: Nodejs_app_pipeline
+  projectIdentifier: CI_NodeJs_Pipeline
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: nodejs_pipeline_harness
+        build: <+input>
+  stages:
+    - stage:
+        name: Build Test and Run
+        identifier: Build_Test_and_Run
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec:
+              size: small
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Install Node Modules
+                  identifier: Install_Node_Modules
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: node:14
+                    shell: Sh
+                    command: npm install
+              - step:
+                  type: Run
+                  name: Create image
+                  identifier: Create_image
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: node:14
+                    shell: Sh
+                    command: |-
+                      touch nodejsdockerfile
+                      cat > nodejsdockerfile <<- EOM
+                      FROM node:14
+                      WORKDIR /nodejshelloworld
+                      COPY package*.json app.js ./
+                      RUN npm install
+                      EXPOSE 8080
+                      CMD ["node", "app.js"]
+                      EOM
+                      cat nodejsdockerfile
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: Build and push image to Docker Hub
+                  identifier: Build_and_push_image_to_Docker_Hub
+                  spec:
+                    connectorRef: Nodejs_DockerHub_connector
+                    repo: rafaelencinas/nodejs-pipeline-harness
+                    tags:
+                      - latest
+                    dockerfile: nodejsdockerfile
+    - stage:
+        name: Integration Test
+        identifier: Integration_Test
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: false
+            paths: []
+          buildIntelligence:
+            enabled: false
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec:
+              size: small
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Pull image and run it
+                  identifier: Pull_image_and_run_it
+                  spec:
+                    connectorRef: Nodejs_DockerHub_connector
+                    image: docker:latest
+                    shell: Sh
+                    command: |-
+                      ls
+                      echo 'Trying to install curl'
+                      apk add --no-cache curl
+                      echo 'Pulling docker image'
+                      docker pull rafaelencinas/nodejs-pipeline-harness:latest
+                      echo 'Running docker image'
+                      docker run -d -p 127.0.0.1:8080:8080 --name hello-world docker.io/rafaelencinas/nodejs-pipeline-harness:latest   
+                      echo 'Wait 10 seconds'
+                      sleep 10
+                      echo 'See logs'
+                      docker logs hello-world
+                      echo 'docker ps see running containers and port bindings'
+                      docker ps
+                      curl --request GET --url http://127.0.0.1:8080
+                      echo "test successful"
+                  description: Pull image and run it
