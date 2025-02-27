@@ -71,7 +71,7 @@ pipeline:
         description: ""
         type: CI
         spec:
-          cloneCodebase: true
+          cloneCodebase: false
           caching:
             enabled: false
             paths: []
@@ -98,6 +98,8 @@ pipeline:
                       ls
                       echo 'Trying to install curl'
                       apk add --no-cache curl
+                      echo "Verifying docker is installed"
+                      docker --version # Check if Docker is available
                       echo 'Pulling docker image'
                       docker pull rafaelencinas/nodejs-pipeline-harness:latest
                       echo 'Running docker image'
