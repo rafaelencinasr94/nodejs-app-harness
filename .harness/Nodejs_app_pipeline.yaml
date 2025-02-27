@@ -100,10 +100,12 @@ pipeline:
                       apk add --no-cache curl
                       echo "Verifying docker is installed"
                       docker --version # Check if Docker is available
+                      echo 'Create docker network'
+                      docker network create my_network # Create a custom Docker network
                       echo 'Pulling docker image'
                       docker pull rafaelencinas/nodejs-pipeline-harness:latest
                       echo 'Running docker image'
-                      docker run -d -p 8080:8080 --name hello-world docker.io/rafaelencinas/nodejs-pipeline-harness:latest   
+                      docker run -d --network my_network -p 8080:8080 --name hello-world docker.io/rafaelencinas/nodejs-pipeline-harness:latest   
                       echo 'Wait 10 seconds'
                       sleep 10
                       echo 'See logs'
@@ -111,7 +113,7 @@ pipeline:
                       echo 'docker ps see running containers and port bindings'
                       docker ps -a
                       echo "==== Network Status ===="
-                      netstat -tuln # Check network status and listening ports
-                      curl --request GET --url http://localhost:8080
+                      docker exec -it hello-world netstat -tuln
+                      docker run --rm --network my_network curlimages/curl:7.73.0 curl --request GET --url http://hello-world:8080
                       echo "test successful"
                   description: Pull image and run it
