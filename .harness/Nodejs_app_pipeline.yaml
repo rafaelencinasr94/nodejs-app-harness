@@ -96,8 +96,7 @@ pipeline:
                     command: |+
                       ls
                       echo 'Trying to run app'
-                      npm install
-                      node app.js
+                      docker run -p 127.0.0.1:8080:8080 docker.io/rafaelencinas/nodejs-pipeline-harness:latest   
 
                   description: Server connection
               - step:
@@ -105,9 +104,13 @@ pipeline:
                   name: Test connection to server 2
                   identifier: Test_connection_to_server_2
                   spec:
+                    connectorRef: Nodejs_DockerHub_connector
+                    image: curlimages/curl:7.73.0
                     shell: Sh
                     command: |-
-                      sleep 10
-                      curl -v http://localhost:8080/
+                      docker ps
+                      sleep 20
+                      curl --request GET \
+                      --url http://localhost:8080
                       echo "test sucessfull"
                   description: Test connection to server 2
