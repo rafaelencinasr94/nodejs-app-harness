@@ -108,7 +108,6 @@ pipeline:
                     shell: Sh
                     command: |-
                       sleep 10
-                      curl --request GET \
-                      --url http://localhost:8080
+                      curl -v http://localhost:8080/
                       echo "test sucessfull"
                   description: Test connection to server 2
