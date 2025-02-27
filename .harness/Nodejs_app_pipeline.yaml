@@ -63,6 +63,7 @@ pipeline:
                     repo: rafaelencinas/nodejs-pipeline-harness
                     tags:
                       - latest
+                    dockerfile: nodejsdockerfile
     - stage:
         name: Integration Test
         identifier: Integration_Test
