@@ -102,15 +102,13 @@ pipeline:
                   description: Server connection
               - step:
                   type: Run
-                  name: Test connection to server
-                  identifier: Test_connection_to_server
+                  name: Test connection to server 2
+                  identifier: Test_connection_to_server_2
                   spec:
-                    connectorRef: Nodejs_DockerHub_connector
-                    image: curlimages/curl:7.73.0
                     shell: Sh
                     command: |-
-                      ls
                       sleep 10
                       curl --request GET \
                       --url http://localhost:8080
                       echo "test sucessfull"
+                  description: Test connection to server 2
