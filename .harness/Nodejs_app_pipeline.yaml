@@ -91,26 +91,16 @@ pipeline:
                   identifier: Nodejs_Server
                   spec:
                     connectorRef: Nodejs_DockerHub_connector
-                    image: rafaelencinas/nodejs-pipeline-harness
-                    shell: Sh
-                    command: |+
-                      ls
-                      echo 'Trying to run app'
-                      docker run -p 127.0.0.1:8080:8080 docker.io/rafaelencinas/nodejs-pipeline-harness:latest   
-
-                  description: Server connection
-              - step:
-                  type: Run
-                  name: Test connection to server 2
-                  identifier: Test_connection_to_server_2
-                  spec:
-                    connectorRef: Nodejs_DockerHub_connector
-                    image: curlimages/curl:7.73.0
+                    image: docker:latest
                     shell: Sh
                     command: |-
+                      ls
+                      echo 'Trying to run app'
+                      docker pull rafaelencinas/nodejs-pipeline-harness:latest
+                      docker run -d -p 127.0.0.1:8080:8080 --name hello-world docker.io/rafaelencinas/nodejs-pipeline-harness:latest   
+                      sleep 15
+                      docker logs hello-world
                       docker ps
-                      sleep 20
-                      curl --request GET \
-                      --url http://localhost:8080
-                      echo "test sucessfull"
-                  description: Test connection to server 2
+                      curl --request GET --url http://localhost:8080
+                      echo "test successful"
+                  description: Server connection
