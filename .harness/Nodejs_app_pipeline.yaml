@@ -92,6 +92,7 @@ pipeline:
                     connectorRef: Nodejs_DockerHub_connector
                     image: rafaelencinas/nodejs-pipeline-harness
                     shell: Sh
+                    command: npm install
                   description: Server connection
               - step:
                   type: Run
