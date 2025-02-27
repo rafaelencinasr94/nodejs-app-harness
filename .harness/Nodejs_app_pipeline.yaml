@@ -91,11 +91,12 @@ pipeline:
                   identifier: Pull_image_and_run_it
                   spec:
                     connectorRef: Nodejs_DockerHub_connector
-                    image: curlimages/curl:7.73.0
+                    image: docker:latest
                     shell: Sh
                     command: |-
                       ls
-                      echo 'Trying to run app'
+                      echo 'Trying to install curl'
+                      apk add --no-cache curl
                       echo 'Pulling docker image'
                       docker pull rafaelencinas/nodejs-pipeline-harness:latest
                       echo 'Running docker image'
