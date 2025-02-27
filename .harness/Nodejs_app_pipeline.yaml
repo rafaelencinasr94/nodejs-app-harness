@@ -52,6 +52,7 @@ pipeline:
                       RUN npm install
                       EXPOSE 8080
                       CMD ["node", "app.js"]
+                      ENV HOST 0.0.0.0
                       EOM
                       cat nodejsdockerfile
               - step:
@@ -100,7 +101,7 @@ pipeline:
                       echo 'Pulling docker image'
                       docker pull rafaelencinas/nodejs-pipeline-harness:latest
                       echo 'Running docker image'
-                      docker run -d -p 127.0.0.1:8080:8080 --name hello-world docker.io/rafaelencinas/nodejs-pipeline-harness:latest   
+                      docker run -d -p 8080:8080 --name hello-world docker.io/rafaelencinas/nodejs-pipeline-harness:latest   
                       echo 'Wait 10 seconds'
                       sleep 10
                       echo 'See logs'
