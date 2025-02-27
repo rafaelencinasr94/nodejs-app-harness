@@ -69,7 +69,7 @@ pipeline:
         description: ""
         type: CI
         spec:
-          cloneCodebase: true
+          cloneCodebase: false
           caching:
             enabled: false
             paths: []
@@ -92,7 +92,6 @@ pipeline:
                     connectorRef: Nodejs_DockerHub_connector
                     image: rafaelencinas/nodejs-pipeline-harness
                     shell: Sh
-                    command: npm install --save express
                   description: Server connection
               - step:
                   type: Run
