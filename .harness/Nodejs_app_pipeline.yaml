@@ -113,7 +113,7 @@ pipeline:
                       echo 'docker ps see running containers and port bindings'
                       docker ps -a
                       echo "==== Network Status ===="
-                      docker exec hello-world netstat -tuln
+                      docker exec hello-world ss -tuln
                       docker run --rm --network my_network curlimages/curl:7.73.0 curl --request GET --url http://hello-world:8080
                       echo "test successful"
                   description: Pull image and run it
