@@ -73,7 +73,7 @@ pipeline:
                     connectorRef: aws_terraform_test
                     region: us-west-1
                     account: "463470983636"
-                    imageName: nodejs_harness
+                    imageName: harnesstest
                     tags:
                       - latest
                     dockerfile: nodejsdockerfile
