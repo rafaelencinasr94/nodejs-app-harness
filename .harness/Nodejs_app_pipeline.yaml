@@ -65,6 +65,18 @@ pipeline:
                     tags:
                       - latest
                     dockerfile: nodejsdockerfile
+              - step:
+                  type: BuildAndPushECR
+                  name: BuildAndPushECR_1
+                  identifier: BuildAndPushECR_1
+                  spec:
+                    connectorRef: aws_terraform_test
+                    region: us-west-1
+                    account: "463470983636"
+                    imageName: nodejs_harness
+                    tags:
+                      - latest
+                    dockerfile: nodejsdockerfile
     - stage:
         name: Integration Test
         identifier: Integration_Test
