@@ -117,3 +117,31 @@ pipeline:
                       docker run --rm --network my_network curlimages/curl:7.73.0 curl --request GET --url http://hello-world:8080
                       echo "test successful"
                   description: Pull image and run it
+    - stage:
+        name: Approval gate
+        identifier: Approval_gate
+        description: ""
+        type: Approval
+        spec:
+          execution:
+            steps:
+              - step:
+                  name: Manual approval
+                  identifier: Manual_approval
+                  type: HarnessApproval
+                  timeout: 1d
+                  spec:
+                    approvalMessage: |-
+                      Please review the following information
+                      and approve the pipeline progression
+                    includePipelineExecutionHistory: true
+                    approvers:
+                      minimumCount: 1
+                      disallowPipelineExecutor: false
+                      userGroups:
+                        - account._account_all_users
+                        - org._organization_all_users
+                        - _project_all_users
+                    isAutoRejectEnabled: false
+                    approverInputs: []
+        tags: {}
