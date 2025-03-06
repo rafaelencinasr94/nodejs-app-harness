@@ -55,28 +55,29 @@ pipeline:
                       ENV HOST 0.0.0.0
                       EOM
                       cat nodejsdockerfile
-              - step:
-                  type: BuildAndPushDockerRegistry
-                  name: Build and push image to Docker Hub
-                  identifier: Build_and_push_image_to_Docker_Hub
-                  spec:
-                    connectorRef: Nodejs_DockerHub_connector
-                    repo: rafaelencinas/nodejs-pipeline-harness
-                    tags:
-                      - latest
-                    dockerfile: nodejsdockerfile
-              - step:
-                  type: BuildAndPushECR
-                  name: BuildAndPushECR_1
-                  identifier: BuildAndPushECR_1
-                  spec:
-                    connectorRef: aws_terraform_test
-                    region: us-west-1
-                    account: "463470983636"
-                    imageName: harnesstest
-                    tags:
-                      - latest
-                    dockerfile: nodejsdockerfile
+              - parallel:
+                  - step:
+                      type: BuildAndPushDockerRegistry
+                      name: Build and push image to Docker Hub
+                      identifier: Build_and_push_image_to_Docker_Hub
+                      spec:
+                        connectorRef: Nodejs_DockerHub_connector
+                        repo: rafaelencinas/nodejs-pipeline-harness
+                        tags:
+                          - latest
+                        dockerfile: nodejsdockerfile
+                  - step:
+                      type: BuildAndPushECR
+                      name: BuildAndPushECR_1
+                      identifier: BuildAndPushECR_1
+                      spec:
+                        connectorRef: aws_terraform_test
+                        region: us-west-1
+                        account: "463470983636"
+                        imageName: harnesstest
+                        tags:
+                          - latest
+                        dockerfile: nodejsdockerfile
     - stage:
         name: Integration Test
         identifier: Integration_Test
