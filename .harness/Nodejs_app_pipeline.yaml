@@ -159,16 +159,6 @@ pipeline:
                     approverInputs: []
         tags: {}
     - stage:
-        name: Terraform infra provisioning
-        identifier: Terraform_infra_provisioning
-        description: ""
-        type: Pipeline
-        spec:
-          org: default
-          pipeline: Provision_terraform
-          project: CI_NodeJs_Pipeline
-          inputs: {}
-    - stage:
         name: Deploy to ECS
         identifier: Deploy_to_ECS
         description: ""
