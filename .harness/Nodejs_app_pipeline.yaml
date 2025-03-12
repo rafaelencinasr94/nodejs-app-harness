@@ -144,9 +144,7 @@ pipeline:
                   type: HarnessApproval
                   timeout: 1d
                   spec:
-                    approvalMessage: |-
-                      Please review the following information
-                      and approve the pipeline progression
+                    approvalMessage: Provision infrastructure using Terraform?
                     includePipelineExecutionHistory: true
                     approvers:
                       minimumCount: 1
@@ -158,3 +156,64 @@ pipeline:
                     isAutoRejectEnabled: false
                     approverInputs: []
         tags: {}
+    - stage:
+        name: Terraform provisioning
+        identifier: Terraform_provisioning
+        description: ""
+        type: Pipeline
+        spec:
+          org: default
+          pipeline: Provision_terraform
+          project: CI_NodeJs_Pipeline
+          inputs: {}
+    - stage:
+        name: Approval for ECS deployment
+        identifier: Approval_for_ECS_deployment
+        description: ""
+        type: Approval
+        spec:
+          execution:
+            steps:
+              - step:
+                  name: Approval for ECS deployment
+                  identifier: Approval_for_ECS_deployment
+                  type: HarnessApproval
+                  timeout: 1d
+                  spec:
+                    approvalMessage: Deploy application to ECS?
+                    includePipelineExecutionHistory: true
+                    approvers:
+                      minimumCount: 1
+                      disallowPipelineExecutor: false
+                      userGroups:
+                        - account._account_all_users
+                        - org._organization_all_users
+                        - _project_all_users
+                    isAutoRejectEnabled: false
+                    approverInputs: []
+        tags: {}
+    - stage:
+        name: Deploy image to ECS Fargate
+        identifier: Deploy_image_to_ECS_Fargate
+        description: ""
+        type: Pipeline
+        spec:
+          org: default
+          pipeline: ECS_test_pipeline
+          project: CI_NodeJs_Pipeline
+          inputs:
+            identifier: ECS_test_pipeline
+            stages:
+              - stage:
+                  identifier: Deplot_to_ECS
+                  type: Deployment
+                  spec:
+                    service:
+                      serviceInputs:
+                        serviceDefinition:
+                          type: ECS
+                          spec:
+                            artifacts:
+                              primary:
+                                primaryArtifactRef: <+input>
+                                sources: <+input>
